@@ -3,26 +3,65 @@
 <head>
     <title>BoxDodge</title>
     <style>
-
+        body, html { padding: 0; margin: 0; overflow: hidden; height: 100%; font-family: 'Raleway', cursive; }
+        header { color: #151515; }
+        header h1 { margin: 0; margin-left: 20px; }
+        header p { margin: 0; margin-bottom: 10px; margin-left: 20px; padding: 0; }
+        canvas { border: 10px solid black; background: skyblue; margin: 0 auto; }
     </style>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <header>
         <h1>BoxDodge</h1>
-
+        <p>Click the Box in the middle to begin. Use your mouse to dodge the other boxes and stay within the marked area for as long as possible.</p>
     </header>
 
     <article>
-        <section>
-
-        </section>
-        <section>
-
-        </section>
+        <canvas id="canv" width="500" height="500"></canvas>
     </article>
 
     <script>
+        (function() {
+            var context, running = false, start = 0, stop = 0, time = 0,
+                // location of the shape
+                x = [30, 150, 250, 400],
+                y = [150, 30, 250, 120],
+                // the "speed" in a direction for the shape
+                a = [2, 3, 2, 2],
+                b = [3, 2, 4, 2],
+                // the bounding box, relative to each shape
+                m = [0, 0, 0, 0],
+                n = [450, 450, 450, 450],
+                p = [0, 0, 0, 0],
+                q = [450, 450, 450, 450],
+                // size of box
+                r = [60, 60, 60, 60],
+                s = [60, 60, 60, 60];
 
+            function s() { return new Date().getTime(); }
+            function d() {
+                context = canv.getContext('2d');
+                context.clearRect(0, 0, 500, 500);
+                context.fillStyle = "#4775a8";
+
+                for (var i = 0; i < 4; i++) {
+                    context.beginPath();
+                    context.fillRect(x[i], y[i], r[i], s[i]);
+                    context.closePath();
+                    context.fill();
+
+                    if (x[i] < m[i] || x[i] > n[i])
+                        a[i] = -a[i];
+                    if (y[i] < p[i] || y[i] > q[i])
+                        b[i] = -b[i];
+                    x[i] += a[i];
+                    y[i] += b[i];
+                }
+            }
+
+            setInterval(d, 10);
+        })();
     </script>
 </body>
 </html>
