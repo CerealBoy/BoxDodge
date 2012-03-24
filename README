@@ -1,0 +1,6 @@
+BoxDodge is a very quickly put-together browser-based HTML5 orientated project to learn, sharpen, enhance, and understand how these new technologies work.
+
+Just fire up ./index.html inside your browser and play.
+The box in the middle is yours, click to begin. The box will follow your cursor, don't let it touch anything else including the surrounding walls.
+
+Based upon Escapa / redsquare at http://members.iinet.net.au/~pontipak/redsquare.html
