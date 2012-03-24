@@ -23,28 +23,36 @@
 
     <script>
         (function() {
-            var context, running = false, start = 0, stop = 0, time = 0,
+            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0,
                 // location of the shape
                 x = [30, 150, 250, 400],
-                y = [150, 30, 250, 120],
+                y = [150, 30, 350, 120],
                 // the "speed" in a direction for the shape
-                a = [2, 3, 2, 2],
+                a = [2, 5, 2, 5],
                 b = [3, 2, 4, 2],
                 // the bounding box, relative to each shape
                 m = [0, 0, 0, 0],
-                n = [450, 450, 450, 450],
+                n = [450, 450, 450, 400],
                 p = [0, 0, 0, 0],
                 q = [450, 450, 450, 450],
                 // size of box
-                r = [60, 60, 60, 60],
-                s = [60, 60, 60, 60];
+                r = [60, 60, 60, 120],
+                s = [60, 60, 60, 60],
+                // the cursor details
+                c = [0, 0],
+                f = [225, 225, 60, 60];
 
             function s() { return new Date().getTime(); }
             function d() {
-                context = canv.getContext('2d');
                 context.clearRect(0, 0, 500, 500);
-                context.fillStyle = "#4775a8";
 
+                context.fillStyle = "#47a875";
+                context.beginPath();
+                context.fillRect(f[0], f[1], f[2], f[3]);
+                context.closePath();
+                context.fill();
+
+                context.fillStyle = "#4775a8";
                 for (var i = 0; i < 4; i++) {
                     context.beginPath();
                     context.fillRect(x[i], y[i], r[i], s[i]);
@@ -60,7 +68,15 @@
                 }
             }
 
-            setInterval(d, 10);
+            canv.onmousemove = function(e) {
+                c = [e.pageX, e.pageY];
+            }
+            canv.onmouseout = function(e) {
+                // cancel the whole thing
+            }
+
+            // setInterval(d, 10);
+            d();
         })();
     </script>
 </body>
