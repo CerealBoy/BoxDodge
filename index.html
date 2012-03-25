@@ -70,7 +70,6 @@
                 }
 
                 if (tick % 1500 === 0) {
-                    console.log("moar speed");
                 } else if ((tick % 6) === 0 && (~~(Math.random() * 100) === 5)) {
                     console.log("random: "+tick);
                 }
@@ -148,8 +147,10 @@
                 }
             }
             canv.onmousedown = function(e) {
-                running = true;
-                start = t();
+                if (running === false) {
+                    running = true;
+                    start = t();
+                }
             }
             timer = setInterval(d, 4);
         })();
