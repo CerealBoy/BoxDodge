@@ -94,9 +94,28 @@
             function c() {
                 if (f[0] < 0 || f[0] > 440 ||
                     f[1] < 0 || f[1] > 440) {
-                    console.log("You hit the wall!");
                     return true;
                 }
+
+                var ftop = f[1], fbot = (f[1] + f[3]), flef = f[0], frig = (f[0] + f[2]), i = 0;
+                for (i = 0; i < x.length; i++) {
+                    var itop = y[i], ibot = (y[i] + s[i]), ilef = x[i], irig = (x[i] + r[i]),
+                        res = overlap(
+                        {"x":f[0],"y":f[1],width:f[2],height:f[3]},
+                        {"x":x[i],"y":y[i],width:r[i],height:s[i]}
+                    );
+                    if (res === true)
+                        return true;
+                }
+            }
+            function overlap(fir, sec) {
+                return ((in_range(fir.x, sec.x, sec.x + sec.width) ||
+                    in_range(sec.x, fir.x, fir.x + fir.width)) &&
+                    (in_range(fir.y, sec.y, sec.y + sec.height) ||
+                    in_range(sec.y, fir.y, fir.y + fir.height)));
+            }
+            function in_range(val, min, max) {
+                return (val <= max) && (val >= min);
             }
 
             canv.onmousemove = function(e) {
