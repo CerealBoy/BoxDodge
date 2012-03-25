@@ -34,7 +34,7 @@
 
     <script>
         (function() {
-            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0, dead = false,
+            var canv = document.getElementById('canv'), context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0, dead = false, finished = document.getElementById('finished'),
                 // location of the shape
                 x = [30, 150, 250, 400],
                 y = [150, 30, 350, 120],
