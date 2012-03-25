@@ -70,6 +70,12 @@
                 }
 
                 if (tick % 1500 === 0) {
+                    for (var i = 0; i < a.length; i++) {
+                        if (a[i] > 0) a[i]++;
+                        else a[i]--;
+                        if (b[i] > 0) b[i]++;
+                        else b[i]--;
+                    }
                 } else if ((tick % 6) === 0 && (~~(Math.random() * 100) === 5)) {
                     console.log("random: "+tick);
                 }
