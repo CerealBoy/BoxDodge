@@ -62,10 +62,17 @@
                     if (c()) {
                         clearInterval(timer);
                         stop = t();
+                        running = false;
 
                         time = stop - start;
                         finished.innerHTML = "Looks like you survived <b>" + (time / 1000) + "</b> seconds!";
                     }
+                }
+
+                if (tick % 1500 === 0) {
+                    console.log("moar speed");
+                } else if ((tick % 6) === 0 && (~~(Math.random() * 100) === 5)) {
+                    console.log("random: "+tick);
                 }
 
                 context.fillStyle = "#47a875";
@@ -131,7 +138,14 @@
                 f = [e.pageX - 10, e.pageY - 75, f[2], f[3]];
             }
             canv.onmouseout = function(e) {
-                // cancel the whole thing
+                if (running === true) {
+                    clearInterval(timer);
+                    stop = t();
+                    running = false;
+
+                    time = stop - start;
+                    finished.innerHTML = "Looks like you survived <b>" + (time / 1000) + "</b> seconds!";
+                }
             }
             canv.onmousedown = function(e) {
                 running = true;
