@@ -34,7 +34,7 @@
 
     <script>
         (function() {
-            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0,
+            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0, dead = false,
                 // location of the shape
                 x = [30, 150, 250, 400],
                 y = [150, 30, 350, 120],
@@ -66,6 +66,7 @@
 
                         time = stop - start;
                         finished.innerHTML = "Looks like you survived <b>" + (time / 1000) + "</b> seconds!";
+                        dead = true;
                     }
                 }
 
@@ -159,17 +160,18 @@
                 f = [e.pageX - 10, e.pageY - 75, f[2], f[3]];
             }
             canv.onmouseout = function(e) {
-                if (running === true) {
+                if (running === true && dead === false) {
                     clearInterval(timer);
                     stop = t();
                     running = false;
 
                     time = stop - start;
                     finished.innerHTML = "Looks like you survived <b>" + (time / 1000) + "</b> seconds!";
+                    dead = true;
                 }
             }
             canv.onmousedown = function(e) {
-                if (running === false) {
+                if (running === false && dead === false) {
                     running = true;
                     start = t();
                 }
