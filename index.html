@@ -27,9 +27,14 @@
         <span id="y">0</span>
     </article>
 
+    <article>
+        <b>Final time: </b>
+        <span id="finished">0 seconds</span>
+    </article>
+
     <script>
         (function() {
-            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0,
+            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0, dead = false,
                 // location of the shape
                 x = [30, 150, 250, 400],
                 y = [150, 30, 350, 120],
@@ -56,6 +61,39 @@
                 if (running === true) {
                     if (c()) {
                         clearInterval(timer);
+                        stop = t();
+                        running = false;
+
+                        time = stop - start;
+                        finished.innerHTML = "Looks like you survived <b>" + (time / 1000) + "</b> seconds!";
+                        dead = true;
+                    }
+                }
+
+                if (tick % 1200 === 0) {
+                    for (var i = 0; i < a.length; i++) {
+                        if (a[i] > 0) a[i]++;
+                        else a[i]--;
+                        if (b[i] > 0) b[i]++;
+                        else b[i]--;
+                    }
+                } else if ((tick % 6) === 0 && (~~(Math.random() * 200) === 5)) {
+                    for (i = 0; i < 3; i++) {
+                        var rand = ~~(Math.random() * 3),
+                            upper = (t() % 2),
+                            cond = ~~(Math.random() * 2);
+
+                        if (cond === 0) {
+                            a[rand] *= -1;
+                            b[upper] *= -1;
+                        } else if (cond === 1) {
+                            b[rand] *= -1;
+                            x[upper] += rand;
+                        } else if (cond === 2) {
+                            b[rand] *= -1;
+                            if (b[rand] > 0) b[rand]++;
+                            else b[rand]--;
+                        }
                     }
                 }
 
@@ -85,9 +123,28 @@
             function c() {
                 if (f[0] < 0 || f[0] > 440 ||
                     f[1] < 0 || f[1] > 440) {
-                    console.log("You hit the wall!");
                     return true;
                 }
+
+                var ftop = f[1], fbot = (f[1] + f[3]), flef = f[0], frig = (f[0] + f[2]), i = 0;
+                for (i = 0; i < x.length; i++) {
+                    var itop = y[i], ibot = (y[i] + s[i]), ilef = x[i], irig = (x[i] + r[i]),
+                        res = overlap(
+                        {"x":f[0],"y":f[1],width:f[2],height:f[3]},
+                        {"x":x[i],"y":y[i],width:r[i],height:s[i]}
+                    );
+                    if (res === true)
+                        return true;
+                }
+            }
+            function overlap(fir, sec) {
+                return ((in_range(fir.x, sec.x, sec.x + sec.width) ||
+                    in_range(sec.x, fir.x, fir.x + fir.width)) &&
+                    (in_range(fir.y, sec.y, sec.y + sec.height) ||
+                    in_range(sec.y, fir.y, fir.y + fir.height)));
+            }
+            function in_range(val, min, max) {
+                return (val <= max) && (val >= min);
             }
 
             canv.onmousemove = function(e) {
@@ -103,11 +160,21 @@
                 f = [e.pageX - 10, e.pageY - 75, f[2], f[3]];
             }
             canv.onmouseout = function(e) {
-                // cancel the whole thing
+                if (running === true && dead === false) {
+                    clearInterval(timer);
+                    stop = t();
+                    running = false;
+
+                    time = stop - start;
+                    finished.innerHTML = "Looks like you survived <b>" + (time / 1000) + "</b> seconds!";
+                    dead = true;
+                }
             }
             canv.onmousedown = function(e) {
-                running = true;
-                start = t();
+                if (running === false && dead === false) {
+                    running = true;
+                    start = t();
+                }
             }
             timer = setInterval(d, 4);
         })();
