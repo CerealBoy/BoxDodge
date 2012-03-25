@@ -27,6 +27,11 @@
         <span id="y">0</span>
     </article>
 
+    <article>
+        <b>Final time: </b>
+        <span id="finished">0 seconds</span>
+    </article>
+
     <script>
         (function() {
             var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0,
@@ -56,6 +61,10 @@
                 if (running === true) {
                     if (c()) {
                         clearInterval(timer);
+                        stop = t();
+
+                        time = stop - start;
+                        finished.innerHTML = "Looks like you survived <b>" + (time / 1000) + "</b> seconds!";
                     }
                 }
 
