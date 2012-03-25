@@ -21,9 +21,19 @@
         <canvas id="canv" width="500" height="500"></canvas>
     </article>
 
+    <article>
+        <b>Co-ordinates:</b>
+        <span id="x">
+
+        </span> <span> : </span>
+        <span id="y">
+
+        </span>
+    </article>
+
     <script>
         (function() {
-            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0,
+            var context = canv.getContext('2d'), running = false, start = 0, stop = 0, time = 0, timer = null, tick = 0,
                 // location of the shape
                 x = [30, 150, 250, 400],
                 y = [150, 30, 350, 120],
@@ -39,12 +49,19 @@
                 r = [60, 60, 60, 120],
                 s = [60, 60, 60, 60],
                 // the cursor details
-                c = [0, 0],
                 f = [225, 225, 60, 60];
 
-            function s() { return new Date().getTime(); }
+            function t() { return new Date().getTime(); }
             function d() {
                 context.clearRect(0, 0, 500, 500);
+                tick++;
+
+                // these are separate so c() isn't run every loop
+                if (running === true) {
+                    if (c()) {
+                        clearInterval(timer);
+                    }
+                }
 
                 context.fillStyle = "#47a875";
                 context.beginPath();
@@ -59,24 +76,44 @@
                     context.closePath();
                     context.fill();
 
-                    if (x[i] < m[i] || x[i] > n[i])
-                        a[i] = -a[i];
-                    if (y[i] < p[i] || y[i] > q[i])
-                        b[i] = -b[i];
-                    x[i] += a[i];
-                    y[i] += b[i];
+                    if (running === true && (tick % 4) === 0) {
+                        if (x[i] < m[i] || x[i] > n[i])
+                            a[i] = -a[i];
+                        if (y[i] < p[i] || y[i] > q[i])
+                            b[i] = -b[i];
+                        x[i] += a[i];
+                        y[i] += b[i];
+                    }
+                }
+            }
+            function c() {
+                if (f[0] < 0 || f[0] > 440 ||
+                    f[1] < 0 || f[1] > 440) {
+                    console.log("You hit the wall!");
+                    return true;
                 }
             }
 
             canv.onmousemove = function(e) {
-                c = [e.pageX, e.pageY];
+                mouse_x = e.pageX - 10;
+                mouse_y = e.pageY - 75;
+
+                mx = document.getElementById('x');
+                my = document.getElementById('y');
+
+                mx.innerHTML = mouse_x;
+                my.innerHTML = mouse_y;
+
+                f = [e.pageX - 10, e.pageY - 75, f[2], f[3]];
             }
             canv.onmouseout = function(e) {
                 // cancel the whole thing
             }
-
-            // setInterval(d, 10);
-            d();
+            canv.onmousedown = function(e) {
+                running = true;
+                start = t();
+            }
+            timer = setInterval(d, 4);
         })();
     </script>
 </body>
